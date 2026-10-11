@@ -3,240 +3,535 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Tachyon — House Points and Rankings System for the technical department." />
-  <title>Tachyon</title>
+  <meta name="description" content="Tachyon — House Points and Rankings Platform for the AIML Technical Department." />
+  <title>Tachyon — AIML Department House Points</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════════
-       SKIP LINK — keyboard / screen-reader access
-       ═══════════════════════════════════════════════ -->
-  <a href="#app" class="skip-link">Skip to application</a>
+  <!-- Accessible Skip Link -->
+  <a href="#standings" class="skip-link">Skip to standings & application</a>
 
-  <!-- ═══════════════════════════════════════════════
-       HERO — cinematic opening, scroll-dissolve
-       ═══════════════════════════════════════════════ -->
-  <section class="hero" aria-label="Tachyon introduction" id="hero">
-    <div class="hero__bg" aria-hidden="true">
-      <!-- Four vertical bands, one per house — animated on scroll -->
-      <div class="hero__band hero__band--alpha"></div>
-      <div class="hero__band hero__band--infer"></div>
-      <div class="hero__band hero__band--matrix"></div>
-      <div class="hero__band hero__band--layer"></div>
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       CINEMATIC SCROLL JOURNEY (Pinned Viewport + Multi-Screen Track)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="scroll-container" id="scroll-container" role="region" aria-label="Cosmic opening journey">
+
+    <!-- Pinned Visual Stage -->
+    <div class="stage-viewport" id="stage-viewport" aria-hidden="true">
+      
+      <!-- Layer 1: Celestial Backdrop (Deep Space Spiral Galaxy) -->
+      <div class="celestial-layer" id="celestial-layer">
+        <div class="galaxy-core-glow" id="galaxy-glow"></div>
+        <img
+          src="{{ url_for('static', filename='assets/galaxy.jpg') }}"
+          alt="Majestic spiral galaxy floating in cosmic void"
+          class="galaxy-image"
+          id="galaxy-img"
+        />
+      </div>
+
+      <!-- Layer 2: Galaxy Acceleration Video (gala-zoom.mp4) -->
+      <video
+        id="gala-video"
+        class="cinematic-video gala-video"
+        src="{{ url_for('static', filename='assets-video/gala-zoom.mp4') }}"
+        playsinline
+        muted
+        preload="auto"
+      ></video>
+
+      <!-- Layer 3: Desert Dawn & Dunes Video (desert-next.mp4) -->
+      <video
+        id="desert-video"
+        class="cinematic-video desert-video"
+        src="{{ url_for('static', filename='assets-video/desert-next.mp4') }}"
+        playsinline
+        muted
+        preload="auto"
+      ></video>
+
+      <!-- Layer 4: Transition Bridge (Singularity Flash & Golden Dawn Haze) -->
+      <div class="transition-bridge" id="transition-bridge">
+        <div class="photon-wash" id="photon-wash"></div>
+        <div class="golden-dawn-haze" id="golden-dawn-haze"></div>
+      </div>
+
+      <!-- Layer 5: Dynamic Particle Canvas (Stardust, Warp Streaks, Sand Motes) -->
+      <canvas id="particle-canvas"></canvas>
+
+      <!-- Layer 6: Atmospheric Light Burst -->
+      <div class="cosmic-burst" id="cosmic-burst"></div>
+
+      <!-- Layer 7: Monumental TACHYON Title Stage (Scene A) -->
+      <div class="reveal-stage" id="reveal-stage">
+        <div class="monument-container" id="monument-container">
+          <div class="monument-halo" id="monument-halo"></div>
+          <h1 class="monument-title" id="monument-title">TACHYON</h1>
+          <div class="monument-subline" id="monument-subline"></div>
+        </div>
+      </div>
+
+      <!-- Layer 8: Cinematic Storytelling Typography Overlays (Scenes B & C) -->
+      <div class="story-stage" id="story-stage">
+        <!-- Story Card 1: Galaxy Ingress -->
+        <div class="story-card story-card--gala-1" id="story-gala-1">
+          <span class="story-tag">The Arena</span>
+          <h2 class="story-headline">WHERE TECHNICAL MASTERY CONVERGES</h2>
+          <p class="story-lead">An intelligence collective driven by competition, code, and relentless ambition.</p>
+        </div>
+
+        <!-- Story Card 2: Galaxy Singularity -->
+        <div class="story-card story-card--gala-2" id="story-gala-2">
+          <span class="story-tag">The Singularity</span>
+          <h2 class="story-headline">BEYOND THE KNOWN HORIZON</h2>
+          <p class="story-lead">Four elite houses forged to test the boundaries of departmental supremacy.</p>
+        </div>
+
+        <!-- Story Card 3: Desert Dawn Callout -->
+        <div class="story-card story-card--desert-callout" id="story-desert-callout">
+          <h2 class="story-headline-massive">FOUR HOUSES.<br/><span class="text-accent">ONE COMPETITION.</span></h2>
+        </div>
+
+        <!-- Story Card 4: Staggered Four Houses Reveal -->
+        <div class="story-card story-card--houses" id="story-houses">
+          <div class="houses-reveal-grid">
+            <div class="house-reveal-card house-reveal-card--alpha" id="house-alpha">
+              <span class="house-glyph" aria-hidden="true">▲</span>
+              <div class="house-meta">
+                <span class="house-name">ALPHA</span>
+                <span class="house-tag">Electric Azure</span>
+              </div>
+            </div>
+            <div class="house-reveal-card house-reveal-card--infer" id="house-infer">
+              <span class="house-glyph" aria-hidden="true">◆</span>
+              <div class="house-meta">
+                <span class="house-name">INFER</span>
+                <span class="house-tag">Solar Flame</span>
+              </div>
+            </div>
+            <div class="house-reveal-card house-reveal-card--matrix" id="house-matrix">
+              <span class="house-glyph" aria-hidden="true">■</span>
+              <div class="house-meta">
+                <span class="house-name">MATRIX</span>
+                <span class="house-tag">Jade Matrix</span>
+              </div>
+            </div>
+            <div class="house-reveal-card house-reveal-card--layer" id="house-layer">
+              <span class="house-glyph" aria-hidden="true">●</span>
+              <div class="house-meta">
+                <span class="house-name">LAYER</span>
+                <span class="house-tag">Royal Violet</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Layer 9: Deep Atmospheric Vignette -->
+      <div class="vignette-overlay"></div>
     </div>
 
-    <div class="hero__content">
-      <p class="hero__eyebrow">Technical Department</p>
-      <h1 class="hero__wordmark">Tachyon</h1>
-      <p class="hero__sub">Four houses. One leaderboard. Every point counts.</p>
-      <a href="#app" class="hero__cta" id="hero-cta">View standings <span aria-hidden="true">↓</span></a>
-    </div>
+    <!-- Meteor Cursor Ribbon Tail Canvas & Luminous Head -->
+    <canvas id="cursor-canvas" aria-hidden="true"></canvas>
+    <div class="cursor-meteor-head" id="cursor-head" aria-hidden="true"></div>
 
-    <div class="hero__scroll-hint" aria-hidden="true">
-      <span class="hero__scroll-line"></span>
-    </div>
-  </section>
+    <!-- Restrained Cinematic Telemetry & Navigation HUD -->
+    <aside class="cinematic-hud" aria-label="Journey telemetry and navigation">
+      <header class="hud-header">
+        <div class="hud-brand-group">
+          <div class="hud-tag">TACHYON // TECHNICAL DEPARTMENT</div>
+          <div class="hud-coordinates" id="hud-coords" aria-live="off">DIST: 2.80M LY // RA 12h 39m</div>
+        </div>
 
-  <!-- ═══════════════════════════════════════════════
-       MAIN APPLICATION
-       ═══════════════════════════════════════════════ -->
-  <main id="app">
+        <nav class="hud-nav" aria-label="Application sections">
+          <a href="#standings" class="hud-nav-link" id="nav-standings">Standings</a>
+          <a href="#award-points" class="hud-nav-link" id="nav-award">Award Points</a>
+          <a href="#event-history" class="hud-nav-link" id="nav-history">History</a>
+          <a href="#department-info" class="hud-nav-link" id="nav-info">Guide</a>
+        </nav>
+      </header>
 
-    <!-- ─── LEADERBOARD ─────────────────────────── -->
-    <section class="section leaderboard-section" aria-labelledby="lb-heading">
-      <div class="container">
+      <footer class="hud-footer">
+        <div class="scroll-indicator" aria-hidden="true">
+          <span>Scroll to travel</span>
+          <div class="scroll-track-bar">
+            <div class="scroll-fill-bar" id="scroll-fill"></div>
+          </div>
+        </div>
+      </footer>
+    </aside>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       OPERATIONAL HEADQUARTERS (Interactive Application)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <main id="app" class="app-main">
+
+    <!-- ─── SECTION 1: STANDINGS ────────────────────────────────────────── -->
+    <section class="app-section standings-section" id="standings" aria-labelledby="standings-heading">
+      <div class="section-container">
+        
         <header class="section-header">
-          <h2 class="section-title" id="lb-heading">Standings</h2>
-          <p class="section-sub">Live rankings by accumulated points</p>
+          <div class="section-badge">Department Competition</div>
+          <h2 class="section-title" id="standings-heading">Live Standings</h2>
+          <p class="section-subtitle">Real-time point accumulation and rankings across the four canonical houses.</p>
         </header>
 
-        <!-- Pillars visualisation -->
-        <div class="pillars" id="pillars" role="img" aria-label="House standings chart">
-          <div class="pillar pillar--alpha" data-house="ALPHA" id="pillar-alpha">
-            <div class="pillar__bar-wrap">
-              <div class="pillar__bar" id="bar-alpha"></div>
-            </div>
-            <div class="pillar__label">
-              <span class="pillar__name">Alpha</span>
-              <span class="pillar__score" id="score-alpha">—</span>
-            </div>
-          </div>
-          <div class="pillar pillar--infer" data-house="INFER" id="pillar-infer">
-            <div class="pillar__bar-wrap">
-              <div class="pillar__bar" id="bar-infer"></div>
-            </div>
-            <div class="pillar__label">
-              <span class="pillar__name">Infer</span>
-              <span class="pillar__score" id="score-infer">—</span>
-            </div>
-          </div>
-          <div class="pillar pillar--matrix" data-house="MATRIX" id="pillar-matrix">
-            <div class="pillar__bar-wrap">
-              <div class="pillar__bar" id="bar-matrix"></div>
-            </div>
-            <div class="pillar__label">
-              <span class="pillar__name">Matrix</span>
-              <span class="pillar__score" id="score-matrix">—</span>
-            </div>
-          </div>
-          <div class="pillar pillar--layer" data-house="LAYER" id="pillar-layer">
-            <div class="pillar__bar-wrap">
-              <div class="pillar__bar" id="bar-layer"></div>
-            </div>
-            <div class="pillar__label">
-              <span class="pillar__name">Layer</span>
-              <span class="pillar__score" id="score-layer">—</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Winner banner -->
+        <!-- Dynamic Winner / Leading House Banner -->
         <div class="winner-banner" id="winner-banner" aria-live="polite" hidden>
-          <span class="winner-banner__label">Leading</span>
-          <span class="winner-banner__name" id="winner-name"></span>
+          <div class="winner-crest" aria-hidden="true">★</div>
+          <div class="winner-info">
+            <span class="winner-banner__label">Leading House</span>
+            <span class="winner-banner__name" id="winner-name">—</span>
+          </div>
         </div>
 
-        <!-- Rank table -->
-        <div class="rank-table-wrap">
-          <table class="rank-table" id="rank-table" aria-label="House rankings">
-            <thead>
-              <tr>
-                <th scope="col">Rank</th>
-                <th scope="col">House</th>
-                <th scope="col">Points</th>
-              </tr>
-            </thead>
-            <tbody id="rank-body">
-              <tr class="rank-table__placeholder">
-                <td colspan="3">
-                  <span class="loading-dots" aria-label="Loading">
-                    <span></span><span></span><span></span>
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- The Four Pillars Visualisation Chart -->
+        <div class="pillars-container">
+          <div class="pillars-chart" id="pillars" role="img" aria-label="House points comparison chart">
+            
+            <!-- Alpha Pillar -->
+            <div class="pillar pillar--alpha" data-house="ALPHA" id="pillar-alpha">
+              <div class="pillar__score-tag" id="score-alpha">0</div>
+              <div class="pillar__bar-wrapper">
+                <div class="pillar__bar" id="bar-alpha" style="height: 0%;"></div>
+              </div>
+              <div class="pillar__base">
+                <span class="pillar__glyph" aria-hidden="true">▲</span>
+                <span class="pillar__name">Alpha</span>
+                <span class="pillar__rank-tag" id="rank-tag-alpha">Rank —</span>
+              </div>
+            </div>
+
+            <!-- Infer Pillar -->
+            <div class="pillar pillar--infer" data-house="INFER" id="pillar-infer">
+              <div class="pillar__score-tag" id="score-infer">0</div>
+              <div class="pillar__bar-wrapper">
+                <div class="pillar__bar" id="bar-infer" style="height: 0%;"></div>
+              </div>
+              <div class="pillar__base">
+                <span class="pillar__glyph" aria-hidden="true">◆</span>
+                <span class="pillar__name">Infer</span>
+                <span class="pillar__rank-tag" id="rank-tag-infer">Rank —</span>
+              </div>
+            </div>
+
+            <!-- Matrix Pillar -->
+            <div class="pillar pillar--matrix" data-house="MATRIX" id="pillar-matrix">
+              <div class="pillar__score-tag" id="score-matrix">0</div>
+              <div class="pillar__bar-wrapper">
+                <div class="pillar__bar" id="bar-matrix" style="height: 0%;"></div>
+              </div>
+              <div class="pillar__base">
+                <span class="pillar__glyph" aria-hidden="true">■</span>
+                <span class="pillar__name">Matrix</span>
+                <span class="pillar__rank-tag" id="rank-tag-matrix">Rank —</span>
+              </div>
+            </div>
+
+            <!-- Layer Pillar -->
+            <div class="pillar pillar--layer" data-house="LAYER" id="pillar-layer">
+              <div class="pillar__score-tag" id="score-layer">0</div>
+              <div class="pillar__bar-wrapper">
+                <div class="pillar__bar" id="bar-layer" style="height: 0%;"></div>
+              </div>
+              <div class="pillar__base">
+                <span class="pillar__glyph" aria-hidden="true">●</span>
+                <span class="pillar__name">Layer</span>
+                <span class="pillar__rank-tag" id="rank-tag-layer">Rank —</span>
+              </div>
+            </div>
+
+          </div>
         </div>
 
-        <div class="lb-error" id="lb-error" role="alert" hidden></div>
+        <!-- Authoritative Standings Table -->
+        <div class="rank-table-card">
+          <div class="card-header">
+            <h3 class="card-title">Competition Leaderboard</h3>
+            <span class="card-meta">Standard Competition Ranking (1224)</span>
+          </div>
+          <div class="table-responsive">
+            <table class="rank-table" id="rank-table" aria-label="House rankings table">
+              <thead>
+                <tr>
+                  <th scope="col" class="th-rank">Rank</th>
+                  <th scope="col" class="th-house">House</th>
+                  <th scope="col" class="th-score">Total Points</th>
+                </tr>
+              </thead>
+              <tbody id="rank-body">
+                <tr class="rank-loading-row">
+                  <td colspan="3">
+                    <div class="loading-state">
+                      <span class="loading-spinner" aria-hidden="true"></span>
+                      <span>Querying backend scores...</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="lb-error" id="lb-error" role="alert" hidden></div>
+        </div>
+
       </div>
     </section>
 
-    <!-- ─── AWARD POINTS ────────────────────────── -->
-    <section class="section award-section" aria-labelledby="award-heading">
-      <div class="container container--narrow">
+    <!-- ─── SECTION 2: AWARD POINTS ─────────────────────────────────────── -->
+    <section class="app-section award-section" id="award-points" aria-labelledby="award-heading">
+      <div class="section-container section-container--narrow">
+        
         <header class="section-header">
-          <h2 class="section-title" id="award-heading">Award Points</h2>
-          <p class="section-sub">Recognise an achievement</p>
+          <div class="section-badge">Scoring Interface</div>
+          <h2 class="section-title" id="award-heading">Award House Points</h2>
+          <p class="section-subtitle">Record an accomplishment, competition victory, or departmental milestone.</p>
         </header>
 
-        <form class="award-form" id="award-form" novalidate>
-          <div class="form-row">
-            <fieldset class="house-picker" id="house-picker">
-              <legend class="form-label">House <span class="required" aria-hidden="true">*</span></legend>
-              <div class="house-options">
-                <label class="house-option house-option--alpha">
-                  <input type="radio" name="house" value="ALPHA" required />
-                  <span class="house-option__label">Alpha</span>
-                </label>
-                <label class="house-option house-option--infer">
-                  <input type="radio" name="house" value="INFER" />
-                  <span class="house-option__label">Infer</span>
-                </label>
-                <label class="house-option house-option--matrix">
-                  <input type="radio" name="house" value="MATRIX" />
-                  <span class="house-option__label">Matrix</span>
-                </label>
-                <label class="house-option house-option--layer">
-                  <input type="radio" name="house" value="LAYER" />
-                  <span class="house-option__label">Layer</span>
-                </label>
-              </div>
-              <p class="form-error" id="house-error" role="alert" hidden>Select a house.</p>
-            </fieldset>
-          </div>
+        <form class="award-form-card" id="award-form" novalidate>
+          
+          <!-- House Picker -->
+          <fieldset class="form-fieldset" id="house-picker">
+            <legend class="form-label">
+              Target House <span class="required-indicator" aria-hidden="true">*</span>
+            </legend>
+            
+            <div class="house-picker-grid">
+              
+              <label class="house-picker-option house-picker-option--alpha">
+                <input type="radio" name="house" value="ALPHA" required />
+                <div class="option-content">
+                  <span class="option-glyph" aria-hidden="true">▲</span>
+                  <span class="option-name">ALPHA</span>
+                  <span class="option-desc">Electric Azure</span>
+                </div>
+              </label>
 
-          <div class="form-row">
+              <label class="house-picker-option house-picker-option--infer">
+                <input type="radio" name="house" value="INFER" />
+                <div class="option-content">
+                  <span class="option-glyph" aria-hidden="true">◆</span>
+                  <span class="option-name">INFER</span>
+                  <span class="option-desc">Solar Flame</span>
+                </div>
+              </label>
+
+              <label class="house-picker-option house-picker-option--matrix">
+                <input type="radio" name="house" value="MATRIX" />
+                <div class="option-content">
+                  <span class="option-glyph" aria-hidden="true">■</span>
+                  <span class="option-name">MATRIX</span>
+                  <span class="option-desc">Jade Matrix</span>
+                </div>
+              </label>
+
+              <label class="house-picker-option house-picker-option--layer">
+                <input type="radio" name="house" value="LAYER" />
+                <div class="option-content">
+                  <span class="option-glyph" aria-hidden="true">●</span>
+                  <span class="option-name">LAYER</span>
+                  <span class="option-desc">Royal Violet</span>
+                </div>
+              </label>
+
+            </div>
+            <p class="form-field-error" id="house-error" role="alert" hidden>Select a house to award points to.</p>
+          </fieldset>
+
+          <!-- Points Input -->
+          <div class="form-group">
             <label class="form-label" for="points-input">
-              Points <span class="required" aria-hidden="true">*</span>
+              Points Amount <span class="required-indicator" aria-hidden="true">*</span>
             </label>
-            <input
-              type="number"
-              id="points-input"
-              name="points"
-              min="1"
-              step="1"
-              placeholder="e.g. 10"
-              class="form-input"
-              autocomplete="off"
-              required
-              aria-describedby="points-error"
-            />
-            <p class="form-error" id="points-error" role="alert" hidden>Enter a whole number greater than zero.</p>
+            <div class="input-wrap">
+              <input
+                type="number"
+                id="points-input"
+                name="points"
+                min="1"
+                step="1"
+                placeholder="e.g. 25"
+                class="form-text-input"
+                autocomplete="off"
+                required
+                aria-describedby="points-error"
+              />
+              <span class="input-suffix">PTS</span>
+            </div>
+            <p class="form-field-error" id="points-error" role="alert" hidden>Enter a positive whole number (minimum 1).</p>
           </div>
 
-          <div class="form-row">
+          <!-- Reason Input -->
+          <div class="form-group">
             <label class="form-label" for="reason-input">
-              Reason <span class="required" aria-hidden="true">*</span>
+              Reason / Milestone <span class="required-indicator" aria-hidden="true">*</span>
             </label>
-            <input
-              type="text"
+            <textarea
               id="reason-input"
               name="reason"
-              placeholder="e.g. First place in the hackathon"
-              class="form-input"
+              placeholder="e.g. 1st Place — Annual Algorithmic Hackathon & Open-Source Benchmark"
+              class="form-textarea-input"
+              rows="3"
               maxlength="200"
               autocomplete="off"
               required
               aria-describedby="reason-error"
-            />
-            <p class="form-error" id="reason-error" role="alert" hidden>Enter a reason for this award.</p>
+            ></textarea>
+            <div class="field-meta">
+              <p class="form-field-error" id="reason-error" role="alert" hidden>Enter a descriptive reason for this award.</p>
+              <span class="char-count" id="reason-count">0 / 200</span>
+            </div>
           </div>
 
-          <div class="form-footer">
-            <button type="submit" class="btn btn--primary" id="submit-btn">
-              <span class="btn__text">Award Points</span>
-              <span class="btn__spinner" aria-hidden="true" hidden></span>
+          <!-- Submit Button & Feedback -->
+          <div class="form-actions">
+            <button type="submit" class="submit-btn" id="submit-btn">
+              <span class="btn-text">Submit Point Award</span>
+              <span class="btn-spinner" aria-hidden="true" hidden></span>
             </button>
           </div>
 
           <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+
         </form>
+
       </div>
     </section>
 
-    <!-- ─── EVENT HISTORY ───────────────────────── -->
-    <section class="section history-section" aria-labelledby="history-heading">
-      <div class="container">
+    <!-- ─── SECTION 3: EVENT HISTORY ────────────────────────────────────── -->
+    <section class="app-section history-section" id="event-history" aria-labelledby="history-heading">
+      <div class="section-container">
+        
         <header class="section-header">
+          <div class="section-badge">Audit Log</div>
           <h2 class="section-title" id="history-heading">Event History</h2>
-          <p class="section-sub">Every point award, in order</p>
+          <p class="section-subtitle">Chronological ledger of all recorded points and department achievements.</p>
         </header>
 
-        <div class="history-list" id="history-list" aria-live="polite">
-          <div class="history-placeholder" id="history-placeholder">
-            <span class="loading-dots" aria-label="Loading">
-              <span></span><span></span><span></span>
-            </span>
+        <div class="history-card">
+          <div class="history-list" id="history-list" aria-live="polite">
+            <div class="history-placeholder" id="history-placeholder">
+              <span class="loading-spinner" aria-hidden="true"></span>
+              <span>Loading historical audit log...</span>
+            </div>
           </div>
+          <div class="history-error" id="history-error" role="alert" hidden></div>
         </div>
 
-        <div class="history-error" id="history-error" role="alert" hidden></div>
+      </div>
+    </section>
+
+    <!-- ─── SECTION 4: DEPARTMENT GUIDE & HOUSE LORE ───────────────────── -->
+    <section class="app-section guide-section" id="department-info" aria-labelledby="guide-heading">
+      <div class="section-container">
+        
+        <header class="section-header">
+          <div class="section-badge">Department Lore & Architecture</div>
+          <h2 class="section-title" id="guide-heading">The Tachyon Collective</h2>
+          <p class="section-subtitle">Technical department structure, canonical houses, and competition invariants.</p>
+        </header>
+
+        <div class="guide-grid">
+          
+          <!-- House Alpha -->
+          <div class="guide-card guide-card--alpha">
+            <div class="guide-card-header">
+              <span class="guide-glyph">▲</span>
+              <div>
+                <h3 class="guide-card-title">House Alpha</h3>
+                <span class="guide-tag">Systems & Speed</span>
+              </div>
+            </div>
+            <p class="guide-card-text">
+              Specialized in low-latency systems architecture, distributed computing, and competitive algorithms. Alpha leads with execution precision and structural optimization.
+            </p>
+          </div>
+
+          <!-- House Infer -->
+          <div class="guide-card guide-card--infer">
+            <div class="guide-card-header">
+              <span class="guide-glyph">◆</span>
+              <div>
+                <h3 class="guide-card-title">House Infer</h3>
+                <span class="guide-tag">Inference & Intelligence</span>
+              </div>
+            </div>
+            <p class="guide-card-text">
+              Dedicated to machine learning inference engines, model pruning, and autonomous intelligence pipelines. Infer represents real-time algorithmic cognition.
+            </p>
+          </div>
+
+          <!-- House Matrix -->
+          <div class="guide-card guide-card--matrix">
+            <div class="guide-card-header">
+              <span class="guide-glyph">■</span>
+              <div>
+                <h3 class="guide-card-title">House Matrix</h3>
+                <span class="guide-tag">Mathematics & Tensor Ops</span>
+              </div>
+            </div>
+            <p class="guide-card-text">
+              The foundational pillar of high-dimensional matrix computation, linear algebra, and GPU acceleration kernels. Matrix represents computational depth.
+            </p>
+          </div>
+
+          <!-- House Layer -->
+          <div class="guide-card guide-card--layer">
+            <div class="guide-card-header">
+              <span class="guide-glyph">●</span>
+              <div>
+                <h3 class="guide-card-title">House Layer</h3>
+                <span class="guide-tag">Deep Architectures</span>
+              </div>
+            </div>
+            <p class="guide-card-text">
+              Focuses on multi-layer deep neural networks, transformer topologies, and representations. Layer pioneers theoretical breakthroughs and emergent capability.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Rules & Governance Card -->
+        <div class="governance-card">
+          <h3 class="governance-title">Competition Architecture & Governance Rules</h3>
+          <ul class="governance-list">
+            <li>
+              <strong>Authoritative Backend Truth:</strong> Point calculations and rankings are derived exclusively by the Flask backend domain engine. Ranks follow standard competition ranking (1224 schema with tied ranks skipping subsequent values).
+            </li>
+            <li>
+              <strong>Audit Ledger Integrity:</strong> Every point event recorded is immutable with positive integers and verified achievement reasons.
+            </li>
+            <li>
+              <strong>Co-Winners Resolution:</strong> In the event of a tie at the highest accumulated score, all tied leaders are recognized as co-leaders.
+            </li>
+          </ul>
+        </div>
+
       </div>
     </section>
 
   </main>
 
-  <!-- ═══════════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════════════════════════════════
        FOOTER
-       ═══════════════════════════════════════════════ -->
-  <footer class="site-footer">
-    <div class="container">
-      <p class="site-footer__text">Tachyon v0.1.0 &mdash; Technical Department</p>
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-meta">
+        <span class="footer-brand">TACHYON</span>
+        <span class="footer-version">v0.1.0 // AIML Technical Department</span>
+      </div>
+      <div class="footer-actions">
+        <button type="button" class="back-to-top-btn" id="back-to-top">
+          <span>Replay Journey</span>
+          <span aria-hidden="true">↑</span>
+        </button>
+      </div>
     </div>
   </footer>
 
