@@ -1,0 +1,47 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment variable files
+.env
+.env.*
+!.env.example
+
+# pytest cache
+.pytest_cache/
+.cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# Local SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Flask instance folder runtime files (keep the folder, ignore its contents)
+instance/*
+!instance/.gitkeep
+
+# IDE / editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS metadata
+.DS_Store
+
+# Windows metadata
+Thumbs.db

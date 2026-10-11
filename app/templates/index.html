@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Tachyon — House Points and Rankings System for the technical department." />
+  <title>Tachyon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       SKIP LINK — keyboard / screen-reader access
+       ═══════════════════════════════════════════════ -->
+  <a href="#app" class="skip-link">Skip to application</a>
+
+  <!-- ═══════════════════════════════════════════════
+       HERO — cinematic opening, scroll-dissolve
+       ═══════════════════════════════════════════════ -->
+  <section class="hero" aria-label="Tachyon introduction" id="hero">
+    <div class="hero__bg" aria-hidden="true">
+      <!-- Four vertical bands, one per house — animated on scroll -->
+      <div class="hero__band hero__band--alpha"></div>
+      <div class="hero__band hero__band--infer"></div>
+      <div class="hero__band hero__band--matrix"></div>
+      <div class="hero__band hero__band--layer"></div>
+    </div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow">Technical Department</p>
+      <h1 class="hero__wordmark">Tachyon</h1>
+      <p class="hero__sub">Four houses. One leaderboard. Every point counts.</p>
+      <a href="#app" class="hero__cta" id="hero-cta">View standings <span aria-hidden="true">↓</span></a>
+    </div>
+
+    <div class="hero__scroll-hint" aria-hidden="true">
+      <span class="hero__scroll-line"></span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       MAIN APPLICATION
+       ═══════════════════════════════════════════════ -->
+  <main id="app">
+
+    <!-- ─── LEADERBOARD ─────────────────────────── -->
+    <section class="section leaderboard-section" aria-labelledby="lb-heading">
+      <div class="container">
+        <header class="section-header">
+          <h2 class="section-title" id="lb-heading">Standings</h2>
+          <p class="section-sub">Live rankings by accumulated points</p>
+        </header>
+
+        <!-- Pillars visualisation -->
+        <div class="pillars" id="pillars" role="img" aria-label="House standings chart">
+          <div class="pillar pillar--alpha" data-house="ALPHA" id="pillar-alpha">
+            <div class="pillar__bar-wrap">
+              <div class="pillar__bar" id="bar-alpha"></div>
+            </div>
+            <div class="pillar__label">
+              <span class="pillar__name">Alpha</span>
+              <span class="pillar__score" id="score-alpha">—</span>
+            </div>
+          </div>
+          <div class="pillar pillar--infer" data-house="INFER" id="pillar-infer">
+            <div class="pillar__bar-wrap">
+              <div class="pillar__bar" id="bar-infer"></div>
+            </div>
+            <div class="pillar__label">
+              <span class="pillar__name">Infer</span>
+              <span class="pillar__score" id="score-infer">—</span>
+            </div>
+          </div>
+          <div class="pillar pillar--matrix" data-house="MATRIX" id="pillar-matrix">
+            <div class="pillar__bar-wrap">
+              <div class="pillar__bar" id="bar-matrix"></div>
+            </div>
+            <div class="pillar__label">
+              <span class="pillar__name">Matrix</span>
+              <span class="pillar__score" id="score-matrix">—</span>
+            </div>
+          </div>
+          <div class="pillar pillar--layer" data-house="LAYER" id="pillar-layer">
+            <div class="pillar__bar-wrap">
+              <div class="pillar__bar" id="bar-layer"></div>
+            </div>
+            <div class="pillar__label">
+              <span class="pillar__name">Layer</span>
+              <span class="pillar__score" id="score-layer">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Winner banner -->
+        <div class="winner-banner" id="winner-banner" aria-live="polite" hidden>
+          <span class="winner-banner__label">Leading</span>
+          <span class="winner-banner__name" id="winner-name"></span>
+        </div>
+
+        <!-- Rank table -->
+        <div class="rank-table-wrap">
+          <table class="rank-table" id="rank-table" aria-label="House rankings">
+            <thead>
+              <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">House</th>
+                <th scope="col">Points</th>
+              </tr>
+            </thead>
+            <tbody id="rank-body">
+              <tr class="rank-table__placeholder">
+                <td colspan="3">
+                  <span class="loading-dots" aria-label="Loading">
+                    <span></span><span></span><span></span>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="lb-error" id="lb-error" role="alert" hidden></div>
+      </div>
+    </section>
+
+    <!-- ─── AWARD POINTS ────────────────────────── -->
+    <section class="section award-section" aria-labelledby="award-heading">
+      <div class="container container--narrow">
+        <header class="section-header">
+          <h2 class="section-title" id="award-heading">Award Points</h2>
+          <p class="section-sub">Recognise an achievement</p>
+        </header>
+
+        <form class="award-form" id="award-form" novalidate>
+          <div class="form-row">
+            <fieldset class="house-picker" id="house-picker">
+              <legend class="form-label">House <span class="required" aria-hidden="true">*</span></legend>
+              <div class="house-options">
+                <label class="house-option house-option--alpha">
+                  <input type="radio" name="house" value="ALPHA" required />
+                  <span class="house-option__label">Alpha</span>
+                </label>
+                <label class="house-option house-option--infer">
+                  <input type="radio" name="house" value="INFER" />
+                  <span class="house-option__label">Infer</span>
+                </label>
+                <label class="house-option house-option--matrix">
+                  <input type="radio" name="house" value="MATRIX" />
+                  <span class="house-option__label">Matrix</span>
+                </label>
+                <label class="house-option house-option--layer">
+                  <input type="radio" name="house" value="LAYER" />
+                  <span class="house-option__label">Layer</span>
+                </label>
+              </div>
+              <p class="form-error" id="house-error" role="alert" hidden>Select a house.</p>
+            </fieldset>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="points-input">
+              Points <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="number"
+              id="points-input"
+              name="points"
+              min="1"
+              step="1"
+              placeholder="e.g. 10"
+              class="form-input"
+              autocomplete="off"
+              required
+              aria-describedby="points-error"
+            />
+            <p class="form-error" id="points-error" role="alert" hidden>Enter a whole number greater than zero.</p>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label" for="reason-input">
+              Reason <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              id="reason-input"
+              name="reason"
+              placeholder="e.g. First place in the hackathon"
+              class="form-input"
+              maxlength="200"
+              autocomplete="off"
+              required
+              aria-describedby="reason-error"
+            />
+            <p class="form-error" id="reason-error" role="alert" hidden>Enter a reason for this award.</p>
+          </div>
+
+          <div class="form-footer">
+            <button type="submit" class="btn btn--primary" id="submit-btn">
+              <span class="btn__text">Award Points</span>
+              <span class="btn__spinner" aria-hidden="true" hidden></span>
+            </button>
+          </div>
+
+          <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ─── EVENT HISTORY ───────────────────────── -->
+    <section class="section history-section" aria-labelledby="history-heading">
+      <div class="container">
+        <header class="section-header">
+          <h2 class="section-title" id="history-heading">Event History</h2>
+          <p class="section-sub">Every point award, in order</p>
+        </header>
+
+        <div class="history-list" id="history-list" aria-live="polite">
+          <div class="history-placeholder" id="history-placeholder">
+            <span class="loading-dots" aria-label="Loading">
+              <span></span><span></span><span></span>
+            </span>
+          </div>
+        </div>
+
+        <div class="history-error" id="history-error" role="alert" hidden></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="container">
+      <p class="site-footer__text">Tachyon v0.1.0 &mdash; Technical Department</p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
